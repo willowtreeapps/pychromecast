@@ -37,18 +37,13 @@ print()
 
 #This isn't working
 # if cast.app_id != "E8C28D3C":
-if not cast.is_idle and cast.app_id != "DCCDFF7E":
+if not cast.is_idle:
     print("Cast is currently showing something - exiting")
     sys.exit()
 
-if cast.app_id != "DCCDFF7E":
-    print("Starting Dashcast")
-    cast.start_app("DCCDFF7E")
-    time.sleep(5)
-else:
-    print("DashCast already running")
-    time.sleep(1)
-
+print("Starting Dashcast")
+cast.start_app("DCCDFF7E")
+time.sleep(5)
 print("Sending url: "+url)
 dc = dashcast.DashCastController()
 cast.register_handler(dc)
