@@ -19,6 +19,9 @@ if len(sys.argv) != 3:
 castName = sys.argv[1];
 url = sys.argv[2];
 
+print("Looking for chromecast "+castName)
+print()
+
 casts = pychromecast.get_chromecasts()
 if len(casts) == 0:
     print("No Devices Found")
@@ -27,22 +30,26 @@ if len(casts) == 0:
 cast = next(cc for cc in casts if cc.device.friendly_name == castName)
 # cast = next(cc for cc in casts if cc.device.friendly_name == "Inara")
 cast.wait();
-#This isn't working v
-if not cast.is_idle:
-    print("Cast is currently showing something - exiting")
-    sys.exit()
-
-cast.start_app("DCCDFF7E")
-print()
+print("Connected:")
 print(cast.device)
-time.sleep(1)
-print()
 print(cast.status)
 print()
 
-time.sleep(10)
+#This isn't working
+# if cast.app_id != "E8C28D3C":
+if not cast.is_idle and cast.app_id != "DCCDFF7E":
+    print("Cast is currently showing something - exiting")
+    sys.exit()
 
+if cast.app_id != "DCCDFF7E":
+    print("Starting Dashcast")
+    cast.start_app("DCCDFF7E")
+    time.sleep(5)
+else:
+    print("DashCast already running")
+    time.sleep(1)
+
+print("Sending url: "+url)
 dc = dashcast.DashCastController()
 cast.register_handler(dc)
 dc.request_dash(url)
-time.sleep(10)
